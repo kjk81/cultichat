@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* This is your new "config file". 
+   You customize the theme directly here.
+*/
+@theme {
+  /* Example: Customizing the font family */
+  --font-sans: "Inter", "system-ui", "sans-serif";
+
+  /* Example: Adding a custom color */
+  --color-chat-bubble: #e0f2fe; 
+}

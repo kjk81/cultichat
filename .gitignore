@@ -1,0 +1,48 @@
+# --- Dependencies ---
+node_modules/
+.pnp
+.pnp.js
+
+# --- Environment Variables (CRITICAL) ---
+# Never commit these! They contain your API keys and secrets.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+.env.*
+
+# --- Build Outputs ---
+# Frontend (Vite) and Backend (TypeScript) build folders
+dist/
+build/
+out/
+
+# --- Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- System Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDE & Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- Testing ---
+coverage/
+
+# --- Supabase (If you use local CLI later) ---
+supabase/tmp/
+supabase/.temp/
+
+# --- Vercel / Render / Cloud specific ---
+.vercel
+.render

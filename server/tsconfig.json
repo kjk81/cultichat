@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2016",             /* Modern JS features */
+    "module": "commonjs",           /* Standard Node.js modules */
+    "rootDir": "./src",             /* Where your .ts files live */
+    "outDir": "./dist",             /* Where compiled .js goes */
+    "strict": true,                 /* Enable strict type checking */
+    "esModuleInterop": true,        /* Allow default imports from CommonJS modules */
+    "skipLibCheck": true,           /* Skip type checking of declaration files */
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],          /* Include everything in src */
+  "exclude": ["node_modules"]       /* Ignore external libraries */
+}
