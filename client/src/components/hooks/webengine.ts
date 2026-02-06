@@ -4,23 +4,28 @@ import type { MLCEngineInterface } from '@mlc-ai/web-llm';
 
 const SELECTED_MODEL = "Llama-3.2-3B-Instruct-q4f32_1-MLC";
 
-export default function useWebLLM() {
+interface WebLLMState {
+    progress: number;
+    message: string;
+    engine: MLCEngineInterface | undefined;
+}
+
+export default function useWebLLM(): WebLLMState {
     const [progress, setProgress] = useState(0);
     const [message, setMessage] = useState<string>("");
     const [engine, setEngine] = useState<MLCEngineInterface>();
 
-    const loading = useRef(false); // ref because it's a one-shot and doesn't need reset
+    const loading = useRef(false);
 
-    // load model and update progress
     useEffect(() => {
         if (loading.current) return;
         loading.current = true;
         const initModel = async () => {
             setMessage("Initializing web model...");
             try {
-                const engine = await CreateWebWorkerMLCEngine(
+                const loadedEngine = await CreateWebWorkerMLCEngine(
                     new Worker(
-                        new URL("../worker.ts", import.meta.url),
+                        new URL("../../worker.ts", import.meta.url),
                     {
                         type: "module"
                     }), SELECTED_MODEL,
@@ -31,19 +36,16 @@ export default function useWebLLM() {
                         }
                     }
                 );
-                setEngine(engine);
-            } catch (error: any) {
-                console.log("Error, ", error.message);
+                setEngine(loadedEngine);
+                setMessage("Model ready.");
+            } catch (error: unknown) {
+                const msg = error instanceof Error ? error.message : String(error);
+                console.error("WebLLM init error:", msg);
+                setMessage(`Error: ${msg}`);
             }
         };
         initModel();
     }, []);
 
-    return [progress, message, engine];
+    return { progress, message, engine };
 }
-
-// note to self
-// useEffect runs based on whatever's in the dependency array (Second arg)
-// if nothing, runs once on mount
-// else runs whenevr an arg changes
-// - usually used for things separate from the UI

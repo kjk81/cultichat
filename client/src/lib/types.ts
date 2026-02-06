@@ -84,13 +84,47 @@ export interface Item {
   description: string
 }
 
-export interface GameInterfaceProps {
-  gameState?: GameState
-  onPlayerInput?: (input: string) => void
+export interface NarrativeEntry {
+  sceneTitle: string
+  text: string
+  playerInput: string
+  timestamp: number
 }
 
+export interface ParseResult {
+  intent: string
+  statChanges: StatChanges
+  actEnded: boolean
+  nextSceneHint: string
+}
 
-export const placeholderGameState: GameState = {
+export interface StatChanges {
+  energy?: number
+  health?: number
+  satisfaction?: number
+  cultivationProgress?: number
+  newTechnique?: Technique | null
+  relationshipChanges?: { targetId: EntityId; bondDelta: number }[]
+}
+
+export interface FullGameState extends GameState {
+  narrativeHistory: NarrativeEntry[]
+  gameId?: string
+}
+
+export type EngineStatus = 'idle' | 'parsing' | 'generating-scene' | 'generating-act' | 'saving'
+
+export interface GameInterfaceProps {
+  gameState?: FullGameState
+  engineStatus?: EngineStatus
+  modelProgress?: number
+  modelMessage?: string
+  onPlayerInput?: (input: string) => void
+  onSave?: () => void
+  onLoad?: () => void
+}
+
+export const placeholderGameState: FullGameState = {
   playerId: 1,
   entities: {
     1: {
@@ -139,5 +173,6 @@ To your left, a servant's passage leads deeper into the sect. To your right, the
     year: 4024,
     month: 1,
     day: 1
-  }
+  },
+  narrativeHistory: []
 }
