@@ -12,6 +12,7 @@ export function GameInterface({
 }: GameInterfaceProps) {
   const [progress, message, engine] = useWebLLM();
   const [playerInput, setPlayerInput] = useState("")
+  const player = gameState.entities[gameState.playerId]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,16 +37,16 @@ export function GameInterface({
         <div className="flex flex-col p-6 md:p-8 border-r border-zinc-900">
           {/* Character Name */}
           <h1 className="text-2xl md:text-3xl font-light text-white tracking-wide mb-8">
-            {gameState.characterName}
+            {player.name}
           </h1>
 
           {/* Character Stats */}
           <div className="space-y-4 mb-8">
-            <StatField label="Cultivation" value={gameState.cultivationLevel} />
-            <StatField label="Happiness" value={gameState.happiness} />
+            <StatField label="Cultivation" value={`${player.cultivation.name} (${player.cultivation.level})`} />
+            <StatField label="Status" value={player.status} />
             <StatField
               label="Current Act"
-              value={`Act ${gameState.currentAct}`}
+              value={gameState.currentAct.name}
             />
           </div>
 
@@ -55,13 +56,13 @@ export function GameInterface({
               Techniques
             </h2>
             <div className="space-y-2">
-              {gameState.techniques.map((technique, index) => (
+              {player.techniques.map((technique, index) => (
                 <div
                   key={index}
                   className="flex justify-between items-center text-zinc-200"
                 >
                   <span>{technique.name}</span>
-                  <span className="text-zinc-500">Lv. {technique.level}</span>
+                  <span className="text-zinc-500">Lv. {technique.masteryLevel}</span>
                 </div>
               ))}
             </div>
@@ -73,7 +74,7 @@ export function GameInterface({
               Last Scene
             </h2>
             <p className="text-zinc-500 text-sm leading-relaxed">
-              {gameState.lastSceneContext}
+              {gameState.currentScene.context}
             </p>
           </div>
         </div>
@@ -83,7 +84,7 @@ export function GameInterface({
           {/* Act Header */}
           <div className="p-6 md:p-8 pb-4">
             <h1 className="text-xl md:text-2xl font-light text-white tracking-wide">
-              Act {gameState.currentAct}: {gameState.actName}
+              {gameState.currentAct.name}
             </h1>
           </div>
 
@@ -91,7 +92,7 @@ export function GameInterface({
           <ScrollArea className="flex-1 px-6 md:px-8">
             <div
               className="prose prose-invert prose-zinc max-w-none text-zinc-200 leading-relaxed pb-6"
-              dangerouslySetInnerHTML={{ __html: gameState.situationText }}
+              dangerouslySetInnerHTML={{ __html: gameState.currentScene.text }}
             />
           </ScrollArea>
 
